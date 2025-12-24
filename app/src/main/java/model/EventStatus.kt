@@ -10,3 +10,4 @@ enum class EventStatus(val displayName: String) {
     CLOSED("Sonlandırıldı")          // Yanlış/uygunsuz olay (admin tarafından kapatıldı)
 }
 
+
