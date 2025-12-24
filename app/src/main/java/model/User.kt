@@ -16,3 +16,4 @@ data class User(
     fun isUser(): Boolean = role == UserRole.USER
 }
 
+

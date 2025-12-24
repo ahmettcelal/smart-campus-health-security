@@ -27,3 +27,4 @@ data class Event(
     fun isInProgress(): Boolean = status == EventStatus.IN_PROGRESS
 }
 
+

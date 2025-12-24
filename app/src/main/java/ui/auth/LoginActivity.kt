@@ -68,14 +68,12 @@ class LoginActivity : AppCompatActivity() {
     private fun performLogin(email: String, password: String) {
         // Kullanıcı rolünü belirle
         val role = if (email == testAdminEmail) UserRole.ADMIN else UserRole.USER
+        val name = if (email == testAdminEmail) "Admin" else "Kullanıcı"
         
-        // TODO: SharedPreferences veya DataStore'a kullanıcı bilgilerini kaydet
-        // Şimdilik sadece MainActivity'ye geç
+        // Kullanıcı bilgilerini kaydet
+        util.UserPreferences.saveUser(this, email, role, name)
         
-        val intent = Intent(this, MainActivity::class.java).apply {
-            putExtra("user_email", email)
-            putExtra("user_role", role.name)
-        }
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish() // LoginActivity'yi kapat
     }

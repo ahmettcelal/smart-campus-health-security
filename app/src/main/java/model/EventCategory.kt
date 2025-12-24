@@ -11,3 +11,4 @@ enum class EventCategory(val displayName: String, val icon: String) {
     TECHNICAL("Teknik Arıza", "🔧")
 }
 
+

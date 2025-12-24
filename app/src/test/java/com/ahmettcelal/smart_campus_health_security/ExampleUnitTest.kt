@@ -1,4 +1,4 @@
-package com.ahmettcelal.smart_campus_health_security
+package com.ahmettcelal.akillikampusaglikguvenlikuygulamasi
 
 import org.junit.Test
 
