@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "SmartCampusHealthSecurity"
+rootProject.name = "smartcampushealthsecurity"
 include(":app")

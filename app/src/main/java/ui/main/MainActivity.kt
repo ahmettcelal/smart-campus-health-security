@@ -6,10 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import com.ahmettcelal.smart_campus_health_security.R
+import com.ahmettcelal.akillikampusaglikguvenlikuygulamasi.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import ui.main.feed.FeedFragment
-import ui.main.map.MapFragment
 import ui.main.profile.ProfileFragment
 
 class MainActivity : AppCompatActivity() {
@@ -35,10 +34,6 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_feed -> {
                     replaceFragment(FeedFragment())
-                    true
-                }
-                R.id.nav_map -> {
-                    replaceFragment(MapFragment())
                     true
                 }
                 R.id.nav_profile -> {

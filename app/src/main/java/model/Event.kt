@@ -9,8 +9,7 @@ data class Event(
     val description: String,
     val category: EventCategory,
     val status: EventStatus,
-    val latitude: Double,              // Harita konumu
-    val longitude: Double,            // Harita konumu
+    val location: String? = null,    // Yer bilgisi (manuel girilen)
     val createdBy: String,            // Kullanıcı ID
     val createdByName: String,       // Kullanıcı adı
     val createdAt: Long = System.currentTimeMillis(),
@@ -26,5 +25,9 @@ data class Event(
     fun isOpen(): Boolean = status == EventStatus.OPEN
     fun isInProgress(): Boolean = status == EventStatus.IN_PROGRESS
 }
+
+
+
+
 
 

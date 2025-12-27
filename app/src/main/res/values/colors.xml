@@ -7,4 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <!-- Event Status Colors -->
+    <color name="status_open">#FF4CAF50</color>
+    <color name="status_in_progress">#FFFF9800</color>
+    <color name="status_resolved">#FF2196F3</color>
+    <color name="status_closed">#FFF44336</color>
 </resources>

@@ -6,7 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.ahmettcelal.smart_campus_health_security.R
+import com.ahmettcelal.akillikampusaglikguvenlikuygulamasi.R
 
 class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,5 +20,9 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 }
+
+
+
+
 
 
