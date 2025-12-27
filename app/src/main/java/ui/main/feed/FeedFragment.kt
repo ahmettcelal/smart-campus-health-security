@@ -13,12 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
-import com.ahmettcelal.smart_campus_health_security.R
+import com.ahmettcelal.akillikampusaglikguvenlikuygulamasi.R
 import model.Event
 import model.EventCategory
 import model.EventStatus
 import ui.event.CreateEventActivity
 import ui.event.EventDetailActivity
+import util.EventManager
 
 /**
  * Anasayfa ekranı - Bildirim akışı
@@ -86,8 +87,19 @@ class FeedFragment : Fragment() {
     }
 
     private fun setupFilters() {
-        chipAll.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
+        // Chip'leri tıklanabilir yap
+        chipAll.isClickable = true
+        chipOpen.isClickable = true
+        chipFollowed.isClickable = true
+        chipHealth.isClickable = true
+        chipSecurity.isClickable = true
+        chipEnvironment.isClickable = true
+        chipLostFound.isClickable = true
+        chipTechnical.isClickable = true
+        
+        chipAll.setOnClickListener {
+            if (!chipAll.isChecked) {
+                chipAll.isChecked = true
                 // Tümü seçiliyse diğer filtreleri temizle
                 chipOpen.isChecked = false
                 chipFollowed.isChecked = false
@@ -100,38 +112,45 @@ class FeedFragment : Fragment() {
             applyFilters()
         }
         
-        chipOpen.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) chipAll.isChecked = false
+        chipOpen.setOnClickListener {
+            chipOpen.isChecked = !chipOpen.isChecked
+            if (chipOpen.isChecked) chipAll.isChecked = false
             applyFilters()
         }
         
-        chipFollowed.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) chipAll.isChecked = false
+        chipFollowed.setOnClickListener {
+            chipFollowed.isChecked = !chipFollowed.isChecked
+            if (chipFollowed.isChecked) chipAll.isChecked = false
             applyFilters()
         }
         
-        chipHealth.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) chipAll.isChecked = false
+        chipHealth.setOnClickListener {
+            chipHealth.isChecked = !chipHealth.isChecked
+            if (chipHealth.isChecked) chipAll.isChecked = false
             applyFilters()
         }
         
-        chipSecurity.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) chipAll.isChecked = false
+        chipSecurity.setOnClickListener {
+            chipSecurity.isChecked = !chipSecurity.isChecked
+            if (chipSecurity.isChecked) chipAll.isChecked = false
             applyFilters()
         }
         
-        chipEnvironment.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) chipAll.isChecked = false
+        chipEnvironment.setOnClickListener {
+            chipEnvironment.isChecked = !chipEnvironment.isChecked
+            if (chipEnvironment.isChecked) chipAll.isChecked = false
             applyFilters()
         }
         
-        chipLostFound.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) chipAll.isChecked = false
+        chipLostFound.setOnClickListener {
+            chipLostFound.isChecked = !chipLostFound.isChecked
+            if (chipLostFound.isChecked) chipAll.isChecked = false
             applyFilters()
         }
         
-        chipTechnical.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) chipAll.isChecked = false
+        chipTechnical.setOnClickListener {
+            chipTechnical.isChecked = !chipTechnical.isChecked
+            if (chipTechnical.isChecked) chipAll.isChecked = false
             applyFilters()
         }
     }
@@ -149,14 +168,32 @@ class FeedFragment : Fragment() {
     private fun setupFab() {
         fabCreateEvent.setOnClickListener {
             val intent = Intent(requireContext(), CreateEventActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_CREATE_EVENT)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_CREATE_EVENT && resultCode == android.app.Activity.RESULT_OK) {
+            // Yeni bildirim oluşturuldu, listeyi yenile
+            loadEvents()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Fragment görünür olduğunda listeyi yenile (yeni bildirimler için)
+        loadEvents()
+    }
+
+    companion object {
+        private const val REQUEST_CODE_CREATE_EVENT = 1001
     }
 
     private fun loadEvents() {
         // TODO: Gerçek uygulamada API'den veya veritabanından yüklenecek
-        // Şimdilik test verisi
-        allEvents = getTestEvents()
+        // EventManager'dan tüm bildirimleri al (test verileri dahil)
+        allEvents = EventManager.getAllEvents()
         applyFilters()
     }
 
@@ -202,167 +239,5 @@ class FeedFragment : Fragment() {
 
         filteredEvents = filtered
         adapter.updateEvents(filteredEvents)
-    }
-
-    private fun getTestEvents(): List<Event> {
-        val now = System.currentTimeMillis()
-        return listOf(
-            Event(
-                id = "1",
-                title = "Kampüs içi güvenlik kamerası arızası",
-                description = "A blok girişindeki güvenlik kamerası çalışmıyor. Acil müdahale gerekiyor.",
-                category = EventCategory.SECURITY,
-                status = EventStatus.OPEN,
-                latitude = 39.9334,
-                longitude = 32.8597,
-                createdBy = "user1",
-                createdByName = "Ahmet Yılmaz",
-                createdAt = now - 3600000, // 1 saat önce
-                isFollowed = false
-            ),
-            Event(
-                id = "2",
-                title = "Sağlık merkezi acil durum",
-                description = "Öğrenci yaralanması, ambulans çağrıldı.",
-                category = EventCategory.HEALTH,
-                status = EventStatus.IN_PROGRESS,
-                latitude = 39.9334,
-                longitude = 32.8597,
-                createdBy = "user2",
-                createdByName = "Mehmet Demir",
-                createdAt = now - 7200000, // 2 saat önce
-                isFollowed = true
-            ),
-            Event(
-                id = "3",
-                title = "Çevre kirliliği - Çöp toplama",
-                description = "B blok yanında çöp birikmesi var.",
-                category = EventCategory.ENVIRONMENT,
-                status = EventStatus.RESOLVED,
-                latitude = 39.9334,
-                longitude = 32.8597,
-                createdBy = "user3",
-                createdByName = "Ayşe Kaya",
-                createdAt = now - 86400000, // 1 gün önce
-                isFollowed = false
-            ),
-            Event(
-                id = "4",
-                title = "Kayıp cüzdan bildirimi",
-                description = "Kütüphane önünde cüzdan kaybettim. İçinde kimlik ve kartlar var.",
-                category = EventCategory.LOST_FOUND,
-                status = EventStatus.OPEN,
-                latitude = 39.9334,
-                longitude = 32.8597,
-                createdBy = "user4",
-                createdByName = "Fatma Şahin",
-                createdAt = now - 1800000, // 30 dakika önce
-                isFollowed = true
-            ),
-            Event(
-                id = "5",
-                title = "Teknik arıza - Asansör çalışmıyor",
-                description = "C blok asansörü çalışmıyor. Teknik servis çağrıldı.",
-                category = EventCategory.TECHNICAL,
-                status = EventStatus.IN_PROGRESS,
-                latitude = 39.9334,
-                longitude = 32.8597,
-                createdBy = "user5",
-                createdByName = "Ali Veli",
-                createdAt = now - 10800000, // 3 saat önce
-                isFollowed = false
-            ),
-            Event(
-                id = "6",
-                title = "Güvenlik uyarısı - Şüpheli kişi",
-                description = "Kampüs girişinde şüpheli bir kişi görüldü. Güvenlik ekibi bilgilendirildi.",
-                category = EventCategory.SECURITY,
-                status = EventStatus.OPEN,
-                latitude = 39.9334,
-                longitude = 32.8597,
-                createdBy = "user6",
-                createdByName = "Zeynep Yıldız",
-                createdAt = now - 900000, // 15 dakika önce
-                isFollowed = false
-            ),
-            Event(
-                id = "7",
-                title = "Sağlık - İlk yardım ihtiyacı",
-                description = "Spor salonunda bir öğrenci düştü. İlk yardım yapıldı.",
-                category = EventCategory.HEALTH,
-                status = EventStatus.RESOLVED,
-                latitude = 39.9334,
-                longitude = 32.8597,
-                createdBy = "user7",
-                createdByName = "Can Öz",
-                createdAt = now - 14400000, // 4 saat önce
-                isFollowed = false
-            ),
-            Event(
-                id = "8",
-                title = "Çevre - Ağaç budama",
-                description = "Kampüs içindeki ağaçların budanması gerekiyor.",
-                category = EventCategory.ENVIRONMENT,
-                status = EventStatus.OPEN,
-                latitude = 39.9334,
-                longitude = 32.8597,
-                createdBy = "user8",
-                createdByName = "Deniz Ak",
-                createdAt = now - 21600000, // 6 saat önce
-                isFollowed = true
-            ),
-            Event(
-                id = "9",
-                title = "Buluntu - Telefon",
-                description = "Kafeteryada bir telefon buldum. Kayıp eşya bürosuna teslim edildi.",
-                category = EventCategory.LOST_FOUND,
-                status = EventStatus.RESOLVED,
-                latitude = 39.9334,
-                longitude = 32.8597,
-                createdBy = "user9",
-                createdByName = "Elif Su",
-                createdAt = now - 172800000, // 2 gün önce
-                isFollowed = false
-            ),
-            Event(
-                id = "10",
-                title = "Teknik - WiFi bağlantı sorunu",
-                description = "D blokta WiFi bağlantısı çalışmıyor. Teknik ekip müdahale ediyor.",
-                category = EventCategory.TECHNICAL,
-                status = EventStatus.IN_PROGRESS,
-                latitude = 39.9334,
-                longitude = 32.8597,
-                createdBy = "user10",
-                createdByName = "Burak Kaya",
-                createdAt = now - 5400000, // 1.5 saat önce
-                isFollowed = false
-            ),
-            Event(
-                id = "11",
-                title = "Güvenlik - Park yeri ihlali",
-                description = "Engelli park yerine izinsiz park edilmiş araç var.",
-                category = EventCategory.SECURITY,
-                status = EventStatus.OPEN,
-                latitude = 39.9334,
-                longitude = 32.8597,
-                createdBy = "user11",
-                createdByName = "Selin Demir",
-                createdAt = now - 2700000, // 45 dakika önce
-                isFollowed = false
-            ),
-            Event(
-                id = "12",
-                title = "Sağlık - Hijyen uyarısı",
-                description = "Yemekhane lavabolarında sabun bitmiş. Yenilenmesi gerekiyor.",
-                category = EventCategory.HEALTH,
-                status = EventStatus.OPEN,
-                latitude = 39.9334,
-                longitude = 32.8597,
-                createdBy = "user12",
-                createdByName = "Mert Yılmaz",
-                createdAt = now - 3600000, // 1 saat önce
-                isFollowed = false
-            )
-        )
     }
 }

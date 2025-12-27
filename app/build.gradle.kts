@@ -5,12 +5,13 @@ plugins {
 }
 
 android {
-    namespace = "com.ahmettcelal.smart_campus_health_security"
-    compileSdk = 36
-
+    namespace = "com.ahmettcelal.akillikampusaglikguvenlikuygulamasi"
+    compileSdk {
+        version = release(36)
+    }
 
     defaultConfig {
-        applicationId = "com.ahmettcelal.smart_campus_health_security"
+        applicationId = "com.ahmettcelal.akillikampusaglikguvenlikuygulamasi"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -54,7 +55,8 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.recyclerview)
-    implementation(libs.play.services.maps)
+    implementation(libs.maps)
+    implementation("com.google.android.gms:play-services-location:21.0.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

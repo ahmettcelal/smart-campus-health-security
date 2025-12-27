@@ -18,4 +18,47 @@
     <string name="name_hint">Ad Soyad</string>
     <string name="password_confirm_hint">Şifre Tekrar</string>
     <string name="register_confirm_button">Kayıt Ol</string>
+    
+    <!-- Feed Fragment Strings -->
+    <string name="search_hint">Ara...</string>
+    <string name="filter_all">Tümü</string>
+    <string name="filter_open">Açık</string>
+    <string name="filter_followed">Takip Edilenler</string>
+    <string name="category_health">Sağlık</string>
+    <string name="category_security">Güvenlik</string>
+    <string name="category_environment">Çevre</string>
+    <string name="category_lost_found">Kayıp-Buluntu</string>
+    <string name="category_technical">Teknik</string>
+    <string name="new_event">Yeni Bildirim</string>
+    <string name="status_open">Açık</string>
+    <string name="status_in_progress">İnceleniyor</string>
+    <string name="status_resolved">Çözüldü</string>
+    <string name="status_closed">Sonlandırıldı</string>
+    <string name="view_detail">Detayı Gör</string>
+    
+    <!-- Event Detail Activity Strings -->
+    <string name="location_title">Konum</string>
+    <string name="photos_title">Fotoğraflar</string>
+    <string name="update_status">Durum Güncelle</string>
+    <string name="follow">Takip Et</string>
+    <string name="unfollow">Takipten Çık</string>
+    <string name="status_updated">Durum güncellendi</string>
+    <string name="followed">Takip ediliyor</string>
+    <string name="unfollowed">Takipten çıkıldı</string>
+    
+    <!-- Create Event Activity Strings -->
+    <string name="create_event_title">Yeni Bildirim Oluştur</string>
+    <string name="category_selection">Tür Seçimi</string>
+    <string name="title_hint">Başlık</string>
+    <string name="description_hint">Açıklama</string>
+    <string name="location_hint">Yer</string>
+    <string name="validation_location_empty">Yer bilgisi boş olamaz</string>
+    <string name="add_photo">Fotoğraf Ekle</string>
+    <string name="submit_event">Bildirimi Gönder</string>
+    <string name="event_created_success">Bildirim başarıyla oluşturuldu!</string>
+    <string name="validation_title_empty">Başlık boş olamaz</string>
+    <string name="validation_description_empty">Açıklama boş olamaz</string>
+    <string name="validation_category_not_selected">Lütfen bir tür seçin</string>
+    <string name="validation_location_not_selected">Lütfen bir konum seçin</string>
+    <string name="location_selected">Konum seçildi</string>
 </resources>
