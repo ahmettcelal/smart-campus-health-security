@@ -20,6 +20,9 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         
+        // Bildirim kanalını oluştur
+        util.NotificationHelper.createNotificationChannel(this)
+        
         // Uygulama başlığını ayarla
         supportActionBar?.title = getString(R.string.app_name)
         

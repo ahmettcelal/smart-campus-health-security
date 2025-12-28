@@ -95,11 +95,28 @@ class ProfileFragment : Fragment() {
             tvFollowedEventsTitle.visibility = View.GONE
             recyclerViewFollowedEvents.visibility = View.GONE
             tvNoFollowedEvents.visibility = View.GONE
+            // Admin için çıkış butonunu admin panel butonunun altına yerleştir
+            val params = btnLogout.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+            params.topToBottom = R.id.btnAdminPanel
+            params.topMargin = 16
+            params.bottomToBottom = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
+            params.bottomMargin = 16
+            btnLogout.layoutParams = params
         } else {
             btnAdminPanel.visibility = View.GONE
             tvFollowedEventsTitle.visibility = View.VISIBLE
             recyclerViewFollowedEvents.visibility = View.VISIBLE
+            // User için çıkış butonunu takip edilen bildirimlerin altına yerleştir
+            val params = btnLogout.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+            params.topToBottom = R.id.recyclerViewFollowedEvents
+            params.topMargin = 16
+            params.bottomToBottom = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
+            params.bottomMargin = 16
+            btnLogout.layoutParams = params
         }
+        
+        // Çıkış butonu her zaman görünür
+        btnLogout.visibility = View.VISIBLE
     }
 
     private fun setupFollowedEvents() {
