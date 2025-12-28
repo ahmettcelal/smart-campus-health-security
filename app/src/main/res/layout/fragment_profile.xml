@@ -19,22 +19,22 @@
             android:text="Profil ve Ayarlar"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:layout_marginBottom="24dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginBottom="24dp" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- User Info Card -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardUserInfo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="2dp"
             app:layout_constraintTop_toBottomOf="@+id/tvProfileTitle"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginBottom="16dp">
+            app:layout_constraintEnd_toEndOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -58,10 +58,10 @@
                     android:text="Kullanıcı Adı"
                     android:textSize="16sp"
                     android:textStyle="bold"
+                    android:layout_marginStart="8dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/labelName"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginStart="8dp" />
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <TextView
                     android:id="@+id/labelEmail"
@@ -70,9 +70,9 @@
                     android:text="E-posta:"
                     android:textSize="12sp"
                     android:textColor="?android:attr/textColorSecondary"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintTop_toBottomOf="@+id/tvUserName"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="12dp" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/tvUserEmail"
@@ -80,11 +80,11 @@
                     android:layout_height="wrap_content"
                     android:text="user@mail.com"
                     android:textSize="14sp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintTop_toBottomOf="@+id/tvUserName"
                     app:layout_constraintStart_toEndOf="@+id/labelEmail"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="12dp" />
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <TextView
                     android:id="@+id/labelRole"
@@ -93,9 +93,9 @@
                     android:text="Rol:"
                     android:textSize="12sp"
                     android:textColor="?android:attr/textColorSecondary"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintTop_toBottomOf="@+id/tvUserEmail"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="12dp" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/tvUserRole"
@@ -103,11 +103,11 @@
                     android:layout_height="wrap_content"
                     android:text="Kullanıcı"
                     android:textSize="14sp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintTop_toBottomOf="@+id/tvUserEmail"
                     app:layout_constraintStart_toEndOf="@+id/labelRole"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="12dp" />
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <TextView
                     android:id="@+id/labelDepartment"
@@ -116,9 +116,9 @@
                     android:text="Birim:"
                     android:textSize="12sp"
                     android:textColor="?android:attr/textColorSecondary"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintTop_toBottomOf="@+id/tvUserRole"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="12dp" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/tvUserDepartment"
@@ -126,18 +126,17 @@
                     android:layout_height="wrap_content"
                     android:text="Bilgisayar Mühendisliği"
                     android:textSize="14sp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintTop_toBottomOf="@+id/tvUserRole"
                     app:layout_constraintStart_toEndOf="@+id/labelDepartment"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="12dp" />
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Followed Events Section (only for users) -->
+        <!-- Followed Events Section -->
         <TextView
             android:id="@+id/tvFollowedEventsTitle"
             android:layout_width="0dp"
@@ -145,27 +144,12 @@
             android:text="Takip Edilen Bildirimler"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/cardUserInfo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="12dp"
-            android:visibility="gone" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewFollowedEvents"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:paddingBottom="100dp"
-            android:clipToPadding="false"
-            android:minHeight="200dp"
-            app:layout_constraintTop_toBottomOf="@+id/tvFollowedEventsTitle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/btnLogout"
             android:visibility="gone"
-            tools:listitem="@layout/item_event" />
+            app:layout_constraintTop_toBottomOf="@+id/cardUserInfo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
             android:id="@+id/tvNoFollowedEvents"
@@ -176,12 +160,24 @@
             android:textColor="?android:attr/textColorSecondary"
             android:gravity="center"
             android:padding="24dp"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/tvFollowedEventsTitle"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="gone" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Admin Panel Button (only visible for admin) -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewFollowedEvents"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:clipToPadding="false"
+            android:visibility="gone"
+            tools:listitem="@layout/item_event"
+            app:layout_constraintTop_toBottomOf="@+id/tvFollowedEventsTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Admin Panel Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAdminPanel"
             android:layout_width="0dp"
@@ -189,16 +185,31 @@
             android:text="Admin Paneli"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:visibility="gone"
             app:icon="@android:drawable/ic_menu_manage"
             app:iconGravity="textStart"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerViewFollowedEvents"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/btnLogout"
-            android:layout_marginTop="24dp"
-            android:visibility="gone" />
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewFollowedEvents"
+            app:layout_constraintBottom_toTopOf="@id/btnChangePassword"
+            android:layout_marginTop="16dp" />
 
-        <!-- Logout Button (visible for all users) -->
+        <!-- Change Password Button (FIXED) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnChangePassword"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:text="Şifre Değiştir"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnAdminPanel"
+            app:layout_constraintBottom_toTopOf="@id/btnLogout"
+            android:layout_marginTop="12dp" />
+
+        <!-- Logout Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogout"
             android:layout_width="0dp"
@@ -208,14 +219,35 @@
             android:textStyle="bold"
             app:icon="@android:drawable/ic_menu_close_clear_cancel"
             app:iconGravity="textStart"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerViewFollowedEvents"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+            app:layout_constraintTop_toBottomOf="@id/btnChangePassword"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- ✅ ÖNEMLİ: recyclerView görünmezken de butonların doğru bağlanması için "anchor" -->
+        <!-- Eğer kullanıcı takip listesi görünmüyorsa, recyclerView zaten GONE olacak; top boşluğu cardUserInfo altından gelsin -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineBottomOfCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="0dp" />
+
+        <!-- Alternatif bağ: btnAdminPanel top'u cardUserInfo altına da bağlanabilsin diye -->
+        <!-- Bunu kodla değil, layout içinde iki view ile çözmek için: -->
+        <View
+            android:id="@+id/anchorAfterCard"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/cardUserInfo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- recyclerView GONE iken btnAdminPanel top'u burada da çalışsın -->
+        <!-- (ConstraintLayout otomatik olarak GONE view’ları skip eder, bu yüzden anchorAfterCard işe yarar) -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.core.widget.NestedScrollView>

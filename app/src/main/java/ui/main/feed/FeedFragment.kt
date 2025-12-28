@@ -30,7 +30,7 @@ class FeedFragment : Fragment() {
     private lateinit var adapter: EventAdapter
     private lateinit var etSearch: TextInputEditText
     private lateinit var fabCreateEvent: FloatingActionButton
-    
+
     // Filter chips
     private lateinit var chipAll: Chip
     private lateinit var chipOpen: Chip
@@ -42,21 +42,23 @@ class FeedFragment : Fragment() {
     private lateinit var chipTechnical: Chip
 
     private var allEvents: List<Event> = emptyList()
-    private var filteredEvents: List<Event> = emptyList()
+
+    // Listener tetiklenirken applyFilters çağrısını geçici kapatmak için
+    private var suppressFilterCallbacks = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view = inflater.inflate(R.layout.fragment_feed, container, false)
-        
+
         initViews(view)
         setupRecyclerView()
         setupFilters()
         setupSearch()
         setupFab()
         loadEvents()
-        
+
         return view
     }
 
@@ -64,7 +66,7 @@ class FeedFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerViewEvents)
         etSearch = view.findViewById(R.id.etSearch)
         fabCreateEvent = view.findViewById(R.id.fabCreateEvent)
-        
+
         chipAll = view.findViewById(R.id.chipAll)
         chipOpen = view.findViewById(R.id.chipOpen)
         chipFollowed = view.findViewById(R.id.chipFollowed)
@@ -87,72 +89,71 @@ class FeedFragment : Fragment() {
     }
 
     private fun setupFilters() {
-        // Chip'leri tıklanabilir yap
-        chipAll.isClickable = true
-        chipOpen.isClickable = true
-        chipFollowed.isClickable = true
-        chipHealth.isClickable = true
-        chipSecurity.isClickable = true
-        chipEnvironment.isClickable = true
-        chipLostFound.isClickable = true
-        chipTechnical.isClickable = true
-        
-        chipAll.setOnClickListener {
-            if (!chipAll.isChecked) {
-                chipAll.isChecked = true
-                // Tümü seçiliyse diğer filtreleri temizle
-                chipOpen.isChecked = false
-                chipFollowed.isChecked = false
-                chipHealth.isChecked = false
-                chipSecurity.isChecked = false
-                chipEnvironment.isChecked = false
-                chipLostFound.isChecked = false
-                chipTechnical.isChecked = false
+        // 1) Chip'leri checkable yap
+        listOf(
+            chipAll, chipOpen, chipFollowed,
+            chipHealth, chipSecurity, chipEnvironment, chipLostFound, chipTechnical
+        ).forEach { it.isCheckable = true }
+
+        // 2) Başlangıç durumu: Tümü seçili
+        suppressFilterCallbacks = true
+        chipAll.isChecked = true
+        chipOpen.isChecked = false
+        chipFollowed.isChecked = false
+        chipHealth.isChecked = false
+        chipSecurity.isChecked = false
+        chipEnvironment.isChecked = false
+        chipLostFound.isChecked = false
+        chipTechnical.isChecked = false
+        suppressFilterCallbacks = false
+
+        // 3) Checked-change üzerinden yönet (ClickListener ile manuel toggle YOK)
+        chipAll.setOnCheckedChangeListener { _, isChecked ->
+            if (suppressFilterCallbacks) return@setOnCheckedChangeListener
+            if (isChecked) {
+                clearAllOtherChips()
             }
             applyFilters()
         }
-        
-        chipOpen.setOnClickListener {
-            chipOpen.isChecked = !chipOpen.isChecked
-            if (chipOpen.isChecked) chipAll.isChecked = false
-            applyFilters()
+
+        val otherChips = listOf(
+            chipOpen, chipFollowed,
+            chipHealth, chipSecurity, chipEnvironment, chipLostFound, chipTechnical
+        )
+
+        otherChips.forEach { chip ->
+            chip.setOnCheckedChangeListener { _, isChecked ->
+                if (suppressFilterCallbacks) return@setOnCheckedChangeListener
+
+                // Başka bir filtre seçildiyse "Tümü" kapanmalı
+                if (isChecked && chipAll.isChecked) {
+                    suppressFilterCallbacks = true
+                    chipAll.isChecked = false
+                    suppressFilterCallbacks = false
+                }
+
+                // Eğer hepsi kapandıysa tekrar "Tümü" aç
+                if (!chipAll.isChecked && otherChips.none { it.isChecked }) {
+                    suppressFilterCallbacks = true
+                    chipAll.isChecked = true
+                    suppressFilterCallbacks = false
+                }
+
+                applyFilters()
+            }
         }
-        
-        chipFollowed.setOnClickListener {
-            chipFollowed.isChecked = !chipFollowed.isChecked
-            if (chipFollowed.isChecked) chipAll.isChecked = false
-            applyFilters()
-        }
-        
-        chipHealth.setOnClickListener {
-            chipHealth.isChecked = !chipHealth.isChecked
-            if (chipHealth.isChecked) chipAll.isChecked = false
-            applyFilters()
-        }
-        
-        chipSecurity.setOnClickListener {
-            chipSecurity.isChecked = !chipSecurity.isChecked
-            if (chipSecurity.isChecked) chipAll.isChecked = false
-            applyFilters()
-        }
-        
-        chipEnvironment.setOnClickListener {
-            chipEnvironment.isChecked = !chipEnvironment.isChecked
-            if (chipEnvironment.isChecked) chipAll.isChecked = false
-            applyFilters()
-        }
-        
-        chipLostFound.setOnClickListener {
-            chipLostFound.isChecked = !chipLostFound.isChecked
-            if (chipLostFound.isChecked) chipAll.isChecked = false
-            applyFilters()
-        }
-        
-        chipTechnical.setOnClickListener {
-            chipTechnical.isChecked = !chipTechnical.isChecked
-            if (chipTechnical.isChecked) chipAll.isChecked = false
-            applyFilters()
-        }
+    }
+
+    private fun clearAllOtherChips() {
+        suppressFilterCallbacks = true
+        chipOpen.isChecked = false
+        chipFollowed.isChecked = false
+        chipHealth.isChecked = false
+        chipSecurity.isChecked = false
+        chipEnvironment.isChecked = false
+        chipLostFound.isChecked = false
+        chipTechnical.isChecked = false
+        suppressFilterCallbacks = false
     }
 
     private fun setupSearch() {
@@ -175,24 +176,16 @@ class FeedFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_CREATE_EVENT && resultCode == android.app.Activity.RESULT_OK) {
-            // Yeni bildirim oluşturuldu, listeyi yenile
             loadEvents()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        // Fragment görünür olduğunda listeyi yenile (yeni bildirimler için)
         loadEvents()
     }
 
-    companion object {
-        private const val REQUEST_CODE_CREATE_EVENT = 1001
-    }
-
     private fun loadEvents() {
-        // TODO: Gerçek uygulamada API'den veya veritabanından yüklenecek
-        // EventManager'dan tüm bildirimleri al (test verileri dahil)
         allEvents = EventManager.getAllEvents()
         applyFilters()
     }
@@ -219,25 +212,28 @@ class FeedFragment : Fragment() {
             if (chipEnvironment.isChecked) selectedCategories.add(EventCategory.ENVIRONMENT)
             if (chipLostFound.isChecked) selectedCategories.add(EventCategory.LOST_FOUND)
             if (chipTechnical.isChecked) selectedCategories.add(EventCategory.TECHNICAL)
-            
+
             if (selectedCategories.isNotEmpty()) {
                 filtered = filtered.filter { it.category in selectedCategories }
             }
         }
 
         // Search filter (her zaman çalışır)
-        val searchQuery = etSearch.text.toString().trim().lowercase()
+        val searchQuery = etSearch.text?.toString()?.trim()?.lowercase().orEmpty()
         if (searchQuery.isNotEmpty()) {
             filtered = filtered.filter {
                 it.title.lowercase().contains(searchQuery) ||
-                it.description.lowercase().contains(searchQuery)
+                        it.description.lowercase().contains(searchQuery)
             }
         }
 
         // Sort by creation time (newest first)
         filtered = filtered.sortedByDescending { it.createdAt }
 
-        filteredEvents = filtered
-        adapter.updateEvents(filteredEvents)
+        adapter.updateEvents(filtered)
+    }
+
+    companion object {
+        private const val REQUEST_CODE_CREATE_EVENT = 1001
     }
 }
