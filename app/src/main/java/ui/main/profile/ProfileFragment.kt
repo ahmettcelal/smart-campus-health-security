@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.ahmettcelal.akillikampusaglikguvenlikuygulamasi.R
-import model.Event
 import model.UserRole
 import ui.admin.AdminPanelActivity
 import ui.auth.LoginActivity
@@ -19,6 +18,9 @@ import ui.event.EventDetailActivity
 import ui.main.feed.EventAdapter
 import util.EventManager
 import util.UserPreferences
+
+// ✅ Yeni ek: ChangePasswordActivity import
+import ui.profile.ChangePasswordActivity
 
 /**
  * Profil ve ayarlar ekranı
@@ -34,6 +36,9 @@ class ProfileFragment : Fragment() {
     private lateinit var tvNoFollowedEvents: TextView
     private lateinit var btnAdminPanel: MaterialButton
     private lateinit var btnLogout: MaterialButton
+
+    // ✅ Yeni ek: Şifre değiştir butonu
+    private lateinit var btnChangePassword: MaterialButton
 
     private lateinit var followedEventsAdapter: EventAdapter
 
@@ -67,6 +72,9 @@ class ProfileFragment : Fragment() {
         tvNoFollowedEvents = view.findViewById(R.id.tvNoFollowedEvents)
         btnAdminPanel = view.findViewById(R.id.btnAdminPanel)
         btnLogout = view.findViewById(R.id.btnLogout)
+
+        // ✅ Yeni ek: XML’de eklediğin butonun id’si bu olmalı
+        btnChangePassword = view.findViewById(R.id.btnChangePassword)
     }
 
     private fun loadUserInfo() {
@@ -95,27 +103,46 @@ class ProfileFragment : Fragment() {
             tvFollowedEventsTitle.visibility = View.GONE
             recyclerViewFollowedEvents.visibility = View.GONE
             tvNoFollowedEvents.visibility = View.GONE
-            // Admin için çıkış butonunu admin panel butonunun altına yerleştir
-            val params = btnLogout.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
-            params.topToBottom = R.id.btnAdminPanel
-            params.topMargin = 16
-            params.bottomToBottom = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
-            params.bottomMargin = 16
-            btnLogout.layoutParams = params
+
+            // ✅ Admin için şifre değiştir butonu yine görünsün
+            btnChangePassword.visibility = View.VISIBLE
+
+            // Admin için buton yerleşimi: Admin Panel -> Şifre Değiştir -> Çıkış
+            val paramsChange = btnChangePassword.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+            paramsChange.topToBottom = R.id.btnAdminPanel
+            paramsChange.topMargin = 16
+            btnChangePassword.layoutParams = paramsChange
+
+            val paramsLogout = btnLogout.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+            paramsLogout.topToBottom = R.id.btnChangePassword
+            paramsLogout.topMargin = 16
+            paramsLogout.bottomToBottom = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
+            paramsLogout.bottomMargin = 16
+            btnLogout.layoutParams = paramsLogout
         } else {
             btnAdminPanel.visibility = View.GONE
             tvFollowedEventsTitle.visibility = View.VISIBLE
             recyclerViewFollowedEvents.visibility = View.VISIBLE
-            // User için çıkış butonunu takip edilen bildirimlerin altına yerleştir
-            val params = btnLogout.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
-            params.topToBottom = R.id.recyclerViewFollowedEvents
-            params.topMargin = 16
-            params.bottomToBottom = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
-            params.bottomMargin = 16
-            btnLogout.layoutParams = params
+
+            // ✅ User için de şifre değiştir butonu görünsün
+            btnChangePassword.visibility = View.VISIBLE
+
+            // User için buton yerleşimi: Takip edilenler -> Şifre Değiştir -> Çıkış
+            val paramsChange = btnChangePassword.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+            paramsChange.topToBottom = R.id.recyclerViewFollowedEvents
+            paramsChange.topMargin = 16
+            btnChangePassword.layoutParams = paramsChange
+
+            val paramsLogout = btnLogout.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+            paramsLogout.topToBottom = R.id.btnChangePassword
+            paramsLogout.topMargin = 16
+            paramsLogout.bottomToBottom = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
+            paramsLogout.bottomMargin = 16
+            btnLogout.layoutParams = paramsLogout
         }
-        
+
         // Çıkış butonu her zaman görünür
+        btnChangePassword.visibility = View.VISIBLE
         btnLogout.visibility = View.VISIBLE
     }
 
@@ -132,12 +159,12 @@ class ProfileFragment : Fragment() {
 
     private fun loadFollowedEvents() {
         val userRole = UserPreferences.getUserRole(requireContext())
-        
+
         // Sadece kullanıcılar için takip edilen bildirimleri göster
         if (userRole == UserRole.USER) {
             val allEvents = EventManager.getAllEvents()
             val followedEvents = allEvents.filter { it.isFollowed }
-            
+
             if (followedEvents.isEmpty()) {
                 recyclerViewFollowedEvents.visibility = View.GONE
                 tvNoFollowedEvents.visibility = View.VISIBLE
@@ -153,6 +180,11 @@ class ProfileFragment : Fragment() {
         btnAdminPanel.setOnClickListener {
             val intent = Intent(requireContext(), AdminPanelActivity::class.java)
             startActivity(intent)
+        }
+
+        // ✅ Yeni ek: Şifre Değiştir ekranına geç
+        btnChangePassword.setOnClickListener {
+            startActivity(Intent(requireContext(), ChangePasswordActivity::class.java))
         }
 
         btnLogout.setOnClickListener {
